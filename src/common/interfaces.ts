@@ -49,8 +49,7 @@ export interface ProviderMap {
 }
 
 export interface Provider {
-  getFile: (fileName: string) => Promise<Buffer>;
-  postFile: (fileName: string, data: Buffer) => Promise<void>;
+  deleteFile: (fileName: string) => Promise<void>;
 }
 
 export interface TaskResult {

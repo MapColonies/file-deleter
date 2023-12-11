@@ -1,6 +1,6 @@
 import { S3 } from 'aws-sdk';
-import { NFSProvider } from '../providers/nfsProvider';
-import { S3Provider } from '../providers/s3Provider';
+import { NFSProvider } from './providers/nfsProvider';
+import { S3Provider } from './providers/s3Provider';
 
 export interface IConfig {
   get: <T>(setting: string) => T;
@@ -38,8 +38,8 @@ export interface ProviderManager {
 }
 
 export interface ProvidersConfig {
-  source: ProvidersConfig;
-  dest: ProvidersConfig;
+  source: ProviderConfig;
+  dest: ProviderConfig;
 }
 
 export type ProviderConfig = S3Config | NFSConfig;

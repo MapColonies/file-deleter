@@ -1,12 +1,14 @@
-import config from 'config';
-import { logMethod } from '@map-colonies/telemetry';
-import { trace } from '@opentelemetry/api';
-import { DependencyContainer } from 'tsyringe/dist/typings/types';
-import jsLogger, { LoggerOptions } from '@map-colonies/js-logger';
+import { TaskHandler } from '@map-colonies/mc-priority-queue';
 import { Metrics } from '@map-colonies/telemetry';
+import { trace, metrics as OtelMetrics } from '@opentelemetry/api';
+import config from 'config';
+import { DependencyContainer } from 'tsyringe/dist/typings/types';
 import { SERVICES, SERVICE_NAME } from './common/constants';
-import { tracing } from './common/tracing';
 import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
+import { ProvidersConfig, ProviderManager } from './common/interfaces';
+import logger from './common/logger';
+import { tracing } from './common/tracing';
+import { getProviderManager } from './common/providers/getProvider';
 
 export interface RegisterOptions {
   override?: InjectionObject<unknown>[];
@@ -14,12 +16,14 @@ export interface RegisterOptions {
 }
 
 export const registerExternalValues = (options?: RegisterOptions): DependencyContainer => {
-  const loggerConfig = config.get<LoggerOptions>('telemetry.logger');
-  // @ts-expect-error the signature is wrong
-  const logger = jsLogger({ ...loggerConfig, prettyPrint: loggerConfig.prettyPrint, hooks: { logMethod } });
+  const providerConfiguration = config.get<ProvidersConfig>('provider');
+  const jobManagerBaseUrl = config.get<string>('jobManager.url');
+  const heartneatUrl = config.get<string>('heartbeat.url');
+  const dequeueIntervalMs = config.get<number>('fileDeleter.waitTime');
+  const heartbeatIntervalMs = config.get<number>('heartbeat.waitTime');
 
-  const metrics = new Metrics(SERVICE_NAME);
-  const meter = metrics.start();
+  const metrics = new Metrics();
+  metrics.start();
 
   tracing.start();
   const tracer = trace.getTracer(SERVICE_NAME);
@@ -28,8 +32,24 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
     { token: SERVICES.CONFIG, provider: { useValue: config } },
     { token: SERVICES.LOGGER, provider: { useValue: logger } },
     { token: SERVICES.TRACER, provider: { useValue: tracer } },
-    { token: SERVICES.METER, provider: { useValue: meter } },
+    { token: SERVICES.METER, provider: { useValue: OtelMetrics.getMeterProvider().getMeter(SERVICE_NAME) } },
     { token: SERVICES.METRICS, provider: { useValue: metrics } },
+    {
+      token: SERVICES.TASK_HANDLER,
+      provider: {
+        useFactory: (): TaskHandler => {
+          return new TaskHandler(logger, jobManagerBaseUrl, heartneatUrl, dequeueIntervalMs, heartbeatIntervalMs);
+        },
+      },
+    },
+    {
+      token: SERVICES.PROVIDER_MANAGER,
+      provider: {
+        useFactory: (): ProviderManager => {
+          return getProviderManager(providerConfiguration);
+        },
+      },
+    },
   ];
 
   return registerDependencies(dependencies, options?.override, options?.useChild);

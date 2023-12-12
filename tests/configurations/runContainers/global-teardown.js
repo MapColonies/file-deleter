@@ -2,5 +2,5 @@
 const dockerCompose = require('docker-compose');
 
 module.exports = async () => {
-    dockerCompose.down();
+  dockerCompose.down();
 };

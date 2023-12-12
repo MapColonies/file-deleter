@@ -5,7 +5,7 @@ import config from 'config';
 import { DependencyContainer } from 'tsyringe/dist/typings/types';
 import { SERVICES, SERVICE_NAME } from './common/constants';
 import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
-import { ProvidersConfig, ProviderManager } from './common/interfaces';
+import { ProviderManager, ProvidersConfig } from './common/interfaces';
 import logger from './common/logger';
 import { tracing } from './common/tracing';
 import { getProviderManager } from './common/providers/getProvider';

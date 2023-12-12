@@ -14,7 +14,7 @@ function getProvider(config: ProviderConfig): S3Provider | NFSProvider {
 
 function getProviderManager(providerConfiguration: ProvidersConfig): ProviderManager {
   return {
-    source: getProvider(providerConfiguration.source),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     dest: getProvider(providerConfiguration.dest),
   };
 }

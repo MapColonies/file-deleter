@@ -17,7 +17,7 @@ export class FileDeleterManager {
     @inject(SERVICES.LOGGER) private readonly logger: Logger,
     @inject(SERVICES.CONFIG) private readonly config: IConfig,
     @inject(SERVICES.TASK_HANDLER) private readonly taskHandler: TaskHandler,
-    @inject(SERVICES.PROVIDER_MANAGER) private readonly providerManager: ProviderManager
+    @inject(SERVICES.PROVIDER_MANAGER) private readonly providerConfig: ProviderManager
   ) {
     this.taskType = this.config.get<string>('fileDeleter.task.type');
     this.maxAttempts = this.config.get<number>('fileDeleter.task.maxAttempts');
@@ -76,8 +76,9 @@ export class FileDeleterManager {
     while (taskResult.index < taskParameters.paths.length) {
       const filePath = taskParameters.paths[taskResult.index];
       try {
-        await this.syncFile(filePath, taskParameters);
+        await this.deleteFile(filePath);
       } catch (error) {
+        await this.handleFailedTask(task, taskResult);
         this.logger.error({ error, taskId: task.id, modelId: task.parameters.modelId });
         taskResult.error = error instanceof Error ? error : new Error(String(error));
         return taskResult;
@@ -97,9 +98,8 @@ export class FileDeleterManager {
     return taskResult;
   }
 
-  private async syncFile(filePath: string, taskParameters: TaskParameters): Promise<void> {
-    const newModelName = this.changeModelName(filePath, taskParameters.modelId);
-    await this.providerManager.dest.deleteFile(newModelName);
+  private async deleteFile(filePath: string): Promise<void> {
+    await this.providerConfig.dest.deleteFile(filePath);
   }
 
   private async rejectJobManager(error: Error, task: ITaskResponse<TaskParameters>): Promise<void> {
@@ -112,11 +112,5 @@ export class FileDeleterManager {
       parameters: { ...task.parameters, lastIndexError },
     };
     await this.taskHandler.jobManagerClient.updateTask<TaskParameters>(task.jobId, task.id, payload);
-  }
-
-  private changeModelName(oldName: string, newName: string): string {
-    const nameSplitted = oldName.split('/');
-    nameSplitted[0] = newName;
-    return nameSplitted.join('/');
   }
 }

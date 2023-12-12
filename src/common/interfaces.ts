@@ -33,12 +33,9 @@ export interface NFSConfig {
 }
 
 export interface ProviderManager {
-  source: S3Provider | NFSProvider;
   dest: S3Provider | NFSProvider;
 }
-
 export interface ProvidersConfig {
-  source: ProviderConfig;
   dest: ProviderConfig;
 }
 

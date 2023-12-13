@@ -1,6 +1,4 @@
 import { S3 } from 'aws-sdk';
-import { NFSProvider } from './providers/nfsProvider';
-import { S3Provider } from './providers/s3Provider';
 
 export interface IConfig {
   get: <T>(setting: string) => T;
@@ -14,7 +12,6 @@ export interface TaskParameters {
 }
 
 export interface S3Config {
-  type: 'S3';
   accessKeyId: string;
   secretAccessKey: string;
   endpointUrl: string;
@@ -28,15 +25,7 @@ export interface S3Config {
 }
 
 export interface NFSConfig {
-  type: 'NFS';
   pvPath: string;
-}
-
-export interface ProviderManager {
-  dest: S3Provider | NFSProvider;
-}
-export interface ProvidersConfig {
-  dest: ProviderConfig;
 }
 
 export type ProviderConfig = S3Config | NFSConfig;

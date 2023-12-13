@@ -4,7 +4,7 @@ import { randWord } from '@ngneat/falso';
 import { getApp } from '../../../src/app';
 import { SERVICES } from '../../../src/common/constants';
 import { FileDeleterManager } from '../../../src/common/fileDeleterManager/fileDeleterManager';
-import { providerManagerMock, createTask, taskHandlerMock } from '../../helpers/mockCreators';
+import { createTask, providerMock, taskHandlerMock } from '../../helpers/mockCreators';
 
 describe('fileDeleterManager', () => {
   let fileDeleterManager: FileDeleterManager;
@@ -14,7 +14,7 @@ describe('fileDeleterManager', () => {
       override: [
         { token: SERVICES.LOGGER, provider: { useValue: jsLogger({ enabled: false }) } },
         { token: SERVICES.TASK_HANDLER, provider: { useValue: taskHandlerMock } },
-        { token: SERVICES.PROVIDER_MANAGER, provider: { useValue: providerManagerMock } },
+   
       ],
     });
 
@@ -45,7 +45,7 @@ describe('fileDeleterManager', () => {
       await fileDeleterManager.start();
 
       expect(taskHandlerMock.dequeue).toHaveBeenCalled();
-      expect(providerManagerMock.dest.deleteFile).not.toHaveBeenCalled();
+      expect(providerMock.deleteFile).not.toHaveBeenCalled();
     });
 
     it('When fund a task with index not -1, it starts from the index', async () => {
@@ -53,37 +53,37 @@ describe('fileDeleterManager', () => {
       const filePath = randWord();
       task.parameters.lastIndexError = 1;
       taskHandlerMock.dequeue.mockResolvedValue(task);
-      providerManagerMock.dest.deleteFile(filePath);
+      providerMock.deleteFile(filePath);
 
       await fileDeleterManager.start();
 
       expect(taskHandlerMock.dequeue).toHaveBeenCalled();
-      expect(providerManagerMock.dest.deleteFile).toHaveBeenCalled();
+      expect(providerMock.deleteFile).toHaveBeenCalled();
     });
 
     it(`When found a task but didn't delete file, throws an error`, async () => {
       taskHandlerMock.dequeue.mockResolvedValue(createTask());
-      providerManagerMock.dest.deleteFile.mockRejectedValue(new Error('error'));
+      providerMock.deleteFile.mockRejectedValue(new Error('error'));
 
       await fileDeleterManager.start();
 
       expect(taskHandlerMock.dequeue).toHaveBeenCalled();
-      expect(providerManagerMock.dest.deleteFile).toHaveBeenCalled();
+      expect(providerMock.deleteFile).toHaveBeenCalled();
     });
 
     it(`When delete file throws unknown error, catches the error`, async () => {
       taskHandlerMock.dequeue.mockResolvedValue(createTask());
-      providerManagerMock.dest.deleteFile.mockRejectedValue(new Error('error'));
+      providerMock.deleteFile.mockRejectedValue(new Error('error'));
 
       await fileDeleterManager.start();
 
       expect(taskHandlerMock.dequeue).toHaveBeenCalled();
-      expect(providerManagerMock.dest.deleteFile).toHaveBeenCalled();
+      expect(providerMock.deleteFile).toHaveBeenCalled();
     });
 
     it(`When found a task but there is a problem with the job-manager, throws an error`, async () => {
       taskHandlerMock.dequeue.mockResolvedValue(createTask());
-      providerManagerMock.dest.deleteFile.mockRejectedValue(new Error('error'));
+      providerMock.deleteFile.mockRejectedValue(new Error('error'));
       taskHandlerMock.reject.mockRejectedValue(new Error('job-manager error'));
 
       const response = await fileDeleterManager.start();

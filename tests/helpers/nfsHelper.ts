@@ -27,4 +27,13 @@ export class NFSHelper {
   public initNFS(): void {
     fs.mkdirSync(this.config.pvPath, { recursive: true });
   }
+
+  public async fileExists(filePath: string): Promise<boolean> {
+    try {
+      await fs.promises.access(filePath);
+      return true; // File exists
+    } catch (error) {
+      return false; // File does not exist
+    }
+  }
 }

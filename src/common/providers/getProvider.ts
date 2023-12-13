@@ -1,22 +1,28 @@
-import { ProviderConfig, ProviderManager, ProvidersConfig } from '../interfaces';
-import logger from '../logger';
+import config from 'config';
+import httpStatus from 'http-status-codes';
+import { container } from 'tsyringe';
+import { AppError } from '../appError';
+import { ProviderConfig } from '../interfaces';
 import { NFSProvider } from './nfsProvider';
 import { S3Provider } from './s3Provider';
 
-function getProvider(config: ProviderConfig): S3Provider | NFSProvider {
-  if (config.type === 'S3') {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return new S3Provider(logger, config);
-  } else {
-    return new NFSProvider(logger, config);
+function getProvider(provider: string): S3Provider | NFSProvider {
+  switch (provider.toLowerCase()) {
+    case 'nfs':
+      return container.resolve(NFSProvider);
+    case 's3':
+      return container.resolve(S3Provider);
+    default:
+      throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, `Invalid config provider received: ${provider} - available values:  "nfs" or "s3"`, false);
   }
 }
 
-function getProviderManager(providerConfiguration: ProvidersConfig): ProviderManager {
-  return {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    dest: getProvider(providerConfiguration.dest),
-  };
+function getProviderConfig(provider: string): ProviderConfig {
+  try {
+    return config.get(provider);
+  } catch (err) {
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, `Invalid config provider received: ${provider} - available values:  "nfs" or "s3"`, false);
+  }
 }
 
-export { getProvider, getProviderManager };
+export { getProvider, getProviderConfig };

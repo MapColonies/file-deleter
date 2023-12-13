@@ -1,14 +1,13 @@
 import { ITaskResponse, OperationStatus } from '@map-colonies/mc-priority-queue';
 import { randUuid, randWord } from '@ngneat/falso';
-import { NFSConfig, ProviderConfig, ProvidersConfig, S3Config, TaskParameters } from '../../src/common/interfaces';
+import { NFSConfig, S3Config, TaskParameters } from '../../src/common/interfaces';
 
 const fakeNFSConfig = (name: string): NFSConfig => {
-  return { type: 'NFS', pvPath: `./tests/helpers/${name}` };
+  return { pvPath: `./tests/helpers/${name}` };
 };
 
 const fakeS3Config = (bucket: string): S3Config => {
   return {
-    type: 'S3',
     accessKeyId: 'minioadmin',
     secretAccessKey: 'mininoadmin',
     endpointUrl: 'http://127.0.0.1:9000',
@@ -19,23 +18,6 @@ const fakeS3Config = (bucket: string): S3Config => {
     maxAttempts: 3,
     sigVersion: 'v4',
   };
-};
-
-const fakeProvidersConfig = (source: string, dest: string): ProvidersConfig => {
-  return {
-    dest: FakeProvider(dest, 'dest-models'),
-  };
-};
-
-const FakeProvider = (provider: string, name: string): ProviderConfig => {
-  switch (provider) {
-    case 's3':
-      return fakeS3Config(name);
-    case 'nfs':
-      return fakeNFSConfig(name);
-    default:
-      throw Error('wrong values');
-  }
 };
 
 export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<TaskParameters> => {
@@ -72,10 +54,8 @@ export const taskHandlerMock = {
   dequeue: jest.fn(),
 };
 
-export const providerManagerMock = {
-  dest: {
-    deleteFile: jest.fn(),
-  },
+export const providerMock = {
+  deleteFile: jest.fn(),
 };
 
 export const fileDeleterManagerMock = {
@@ -95,6 +75,3 @@ export const loggerMock = {
   error: jest.fn(),
   debug: jest.fn(),
 };
-
-export const mockNFStNFS = fakeProvidersConfig('nsf', 'nfs') as { dest: NFSConfig };
-export const mockS3tS3 = fakeProvidersConfig('s3', 's3') as { dest: S3Config };

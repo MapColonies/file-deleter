@@ -17,6 +17,10 @@
   "jobManager": {
     "url": "http://127.0.0.1:8080"
   },
+  "deleting": {
+    "provider": "NFS",
+    "blackList": ["tar", "zip", "rar", "7z"]
+  },
   "heartbeat": {
     "url": "http://127.0.0.1:8082",
     "waitTime": 3000

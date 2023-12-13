@@ -14,7 +14,12 @@ export class NFSProvider implements Provider {
       throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exists in the agreed folder`, true);
     }
     this.logger.debug({ msg: 'Starting deleteFile', fullPath });
-    await fs.promises.unlink(fullPath);
-    this.logger.debug({ msg: 'Done deleteFile', fullPath });
+    try {
+      await fs.promises.unlink(fullPath);
+      this.logger.debug({ msg: 'Done deleteFile', fullPath });
+    } catch (error) {
+      this.logger.error(`Deleting failed: ${filePath}`, error);
+      throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, `Deleting failed: ${filePath}`, true);
+    }
   }
 }

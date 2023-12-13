@@ -5,10 +5,10 @@ import config from 'config';
 import { DependencyContainer } from 'tsyringe/dist/typings/types';
 import { SERVICES, SERVICE_NAME } from './common/constants';
 import { InjectionObject, registerDependencies } from './common/dependencyRegistration';
-import { ProviderManager, ProvidersConfig } from './common/interfaces';
+import { Provider, ProviderConfig } from './common/interfaces';
 import logger from './common/logger';
 import { tracing } from './common/tracing';
-import { getProviderManager } from './common/providers/getProvider';
+import { getProvider, getProviderConfig } from './common/providers/getProvider';
 
 export interface RegisterOptions {
   override?: InjectionObject<unknown>[];
@@ -16,7 +16,7 @@ export interface RegisterOptions {
 }
 
 export const registerExternalValues = (options?: RegisterOptions): DependencyContainer => {
-  const providerConfiguration = config.get<ProvidersConfig>('provider');
+  const provider = config.get<string>('deleting.provider');
   const jobManagerBaseUrl = config.get<string>('jobManager.url');
   const heartneatUrl = config.get<string>('heartbeat.url');
   const dequeueIntervalMs = config.get<number>('fileDeleter.waitTime');
@@ -43,10 +43,18 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
       },
     },
     {
-      token: SERVICES.PROVIDER_MANAGER,
+      token: SERVICES.PROVIDER_CONFIG,
       provider: {
-        useFactory: (): ProviderManager => {
-          return getProviderManager(providerConfiguration);
+        useFactory: (): ProviderConfig => {
+          return getProviderConfig(provider);
+        },
+      },
+    },
+    {
+      token: SERVICES.PROVIDER,
+      provider: {
+        useFactory: (): Provider => {
+          return getProvider(provider);
         },
       },
     },

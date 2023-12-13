@@ -3,7 +3,7 @@ import { ITaskResponse, IUpdateTaskBody, TaskHandler } from '@map-colonies/mc-pr
 import { IConfig } from 'config';
 import { inject, injectable } from 'tsyringe';
 import { JOB_TYPE, SERVICES } from '../constants';
-import { ProviderManager, TaskParameters, TaskResult } from '../interfaces';
+import { Provider, TaskParameters, TaskResult } from '../interfaces';
 
 @injectable()
 export class FileDeleterManager {
@@ -17,7 +17,7 @@ export class FileDeleterManager {
     @inject(SERVICES.LOGGER) private readonly logger: Logger,
     @inject(SERVICES.CONFIG) private readonly config: IConfig,
     @inject(SERVICES.TASK_HANDLER) private readonly taskHandler: TaskHandler,
-    @inject(SERVICES.PROVIDER_MANAGER) private readonly providerConfig: ProviderManager
+    @inject(SERVICES.PROVIDER) private readonly provider: Provider
   ) {
     this.taskType = this.config.get<string>('fileDeleter.task.type');
     this.maxAttempts = this.config.get<number>('fileDeleter.task.maxAttempts');
@@ -46,7 +46,6 @@ export class FileDeleterManager {
       this.logger.info({ msg: 'Finishing ack task', task: task.id, modelId: task.parameters.modelId });
       await this.deleteTaskParameters(task);
       this.logger.info({ msg: `Deleted task's parameters successfully`, task: task.id, modelId: task.parameters.modelId });
-
       this.taskCounter--;
       this.logger.info({ msg: 'Done working on a task in this interval', taskId: task.id, isCompleted, modelId: task.parameters.modelId });
     }
@@ -99,7 +98,7 @@ export class FileDeleterManager {
   }
 
   private async deleteFile(filePath: string): Promise<void> {
-    await this.providerConfig.dest.deleteFile(filePath);
+    await this.provider.deleteFile(filePath);
   }
 
   private async rejectJobManager(error: Error, task: ITaskResponse<TaskParameters>): Promise<void> {

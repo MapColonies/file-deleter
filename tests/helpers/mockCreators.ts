@@ -1,24 +1,7 @@
 import { ITaskResponse, OperationStatus } from '@map-colonies/mc-priority-queue';
 import { randUuid, randWord } from '@ngneat/falso';
-import { NFSConfig, S3Config, TaskParameters } from '../../src/common/interfaces';
+import { TaskParameters } from '../../src/common/interfaces';
 
-const fakeNFSConfig = (name: string): NFSConfig => {
-  return { pvPath: `./tests/helpers/${name}` };
-};
-
-const fakeS3Config = (bucket: string): S3Config => {
-  return {
-    accessKeyId: 'minioadmin',
-    secretAccessKey: 'mininoadmin',
-    endpointUrl: 'http://127.0.0.1:9000',
-    bucket,
-    region: 'us-east-1',
-    forcePathStyle: true,
-    sslEnables: false,
-    maxAttempts: 3,
-    sigVersion: 'v4',
-  };
-};
 
 export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<TaskParameters> => {
   return {
@@ -54,7 +37,7 @@ export const taskHandlerMock = {
   dequeue: jest.fn(),
 };
 
-export const providerMock = {
+export const configProviderMock = {
   deleteFile: jest.fn(),
 };
 

@@ -30,12 +30,8 @@ export interface NFSConfig {
 
 export type ProviderConfig = S3Config | NFSConfig;
 
-export interface ProviderMap {
-  [key: string]: Provider;
-}
-
 export interface Provider {
-  deleteFile: (fileName: string) => Promise<void>;
+  deleteFile: (filePath: string) => Promise<void>;
 }
 
 export interface TaskResult {

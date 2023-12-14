@@ -8,7 +8,7 @@ import { InjectionObject, registerDependencies } from './common/dependencyRegist
 import { Provider, ProviderConfig } from './common/interfaces';
 import logger from './common/logger';
 import { tracing } from './common/tracing';
-import { getProvider, getProviderConfig } from './common/providers/getProvider';
+import { getProvider, getProviderConfig } from './providers/getProvider';
 
 export interface RegisterOptions {
   override?: InjectionObject<unknown>[];
@@ -16,9 +16,9 @@ export interface RegisterOptions {
 }
 
 export const registerExternalValues = (options?: RegisterOptions): DependencyContainer => {
-  const provider = config.get<string>('deleting.provider');
+  const provider = config.get<string>('provider');
   const jobManagerBaseUrl = config.get<string>('jobManager.url');
-  const heartneatUrl = config.get<string>('heartbeat.url');
+  const heartbeatUrl = config.get<string>('heartbeat.url');
   const dequeueIntervalMs = config.get<number>('fileDeleter.waitTime');
   const heartbeatIntervalMs = config.get<number>('heartbeat.waitTime');
 
@@ -38,7 +38,7 @@ export const registerExternalValues = (options?: RegisterOptions): DependencyCon
       token: SERVICES.TASK_HANDLER,
       provider: {
         useFactory: (): TaskHandler => {
-          return new TaskHandler(logger, jobManagerBaseUrl, heartneatUrl, dequeueIntervalMs, heartbeatIntervalMs);
+          return new TaskHandler(logger, jobManagerBaseUrl, heartbeatUrl, dequeueIntervalMs, heartbeatIntervalMs);
         },
       },
     },

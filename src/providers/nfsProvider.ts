@@ -1,11 +1,17 @@
 import fs from 'fs';
 import { Logger } from '@map-colonies/js-logger';
 import httpStatus from 'http-status-codes';
-import { AppError } from '../appError';
-import { NFSConfig, Provider } from '../interfaces';
+import { inject, injectable } from 'tsyringe';
+import { AppError } from '../common/appError';
+import { NFSConfig, Provider } from '../common/interfaces';
+import { SERVICES } from '../common/constants';
 
+@injectable()
 export class NFSProvider implements Provider {
-  public constructor(private readonly logger: Logger, private readonly config: NFSConfig) {}
+  public constructor(
+    @inject(SERVICES.LOGGER) protected readonly logger: Logger,
+    @inject(SERVICES.PROVIDER_CONFIG) protected readonly config: NFSConfig,
+    ) {}
 
   public async deleteFile(filePath: string): Promise<void> {
     const pvPath = this.config.pvPath;

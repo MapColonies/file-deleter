@@ -18,6 +18,6 @@ export const SERVICES: Record<string, symbol> = {
   S3_CONFIG: Symbol('S3Config'),
   NFS_CONFIG: Symbol('NFSConfig'),
   TASK_HANDLER: Symbol('TaskHandler'),
-  PROVIDER_MANAGER: Symbol('ProviderManager'),
+  PROVIDER: Symbol('Provider'),
 };
 /* eslint-enable @typescript-eslint/naming-convention */

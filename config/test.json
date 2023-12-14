@@ -1,4 +1,19 @@
 {
+  "telemetry": {
+    "logger": {
+      "level": "info",
+      "prettyPrint": false
+    },
+    "tracing": {
+      "enabled": false,
+      "url": "http://telemetryUrl/tracing"
+    },
+    "metrics": {
+      "enabled": false,
+      "url": "http://telemetryUrl/metrics",
+      "interval": "3"
+    }
+  },
   "jobManager": {
     "url": "http://127.0.0.1:8080"
   },
@@ -6,36 +21,19 @@
     "url": "http://127.0.0.1:8082",
     "waitTime": 3000
   },
-  "catalog": {
-    "url": "http://127.0.0.1:8083"
+  "provider": "NFS",
+  "S3": {
+    "accessKeyId": "minio",
+    "secretAccessKey": "minio",
+    "endpointUrl": "http://10.8.0.9:9000",
+    "bucket": "3dtiles-dest",
+    "region": "us-east-1",
+    "forcePathStyle": true,
+    "sslEnabled": false,
+    "maxAttempts": 3
   },
-  "nginx": {
-    "url": "http://127.0.0.1:8084"
-  },
-  "provider": {
-    "source": {
-      "accessKeyId": "minioadmin",
-      "secretAccessKey": "minioadmin",
-      "endpointUrl": "http://127.0.0.1:9000",
-      "bucket": "3dtiles",
-      "region": "us-east-1",
-      "forcePathStyle": true,
-      "sslEnabled": false,
-      "maxAttempts": 3,
-      "sigVersion": "v4"
-    },
-    "dest": {
-      "accessKeyId": "minioadmin",
-      "secretAccessKey": "minioadmin",
-      "endpointUrl": "http://127.0.0.1:9000",
-      "bucket": "3dtiles",
-      "region": "us-east-1",
-      "forcePathStyle": true,
-      "sslEnabled": false,
-      "maxAttempts": 3,
-      "sigVersion": "v4",
-      "storageClass": "STANDARD"
-    }
+  "NFS": {
+    "pvPath": "/home/netanel/3DModels"
   },
   "fileDeleter": {
     "job": {
@@ -45,8 +43,8 @@
       "type": "tilesDeleting",
       "maxAttempts": 3
     },
-    "waitTime": 0,
-    "taskPoolSize": 3,
-    "intervalMs": 5000
+    "waitTime": 5000,
+    "intervalMs": 5000,
+    "taskPoolSize": 1
   }
 }

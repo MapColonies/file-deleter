@@ -3,7 +3,8 @@ import { inject, singleton } from 'tsyringe';
 import { IConfig } from 'config';
 import { SERVICES } from './common/constants';
 import { registerExternalValues, RegisterOptions } from './containerConfig';
-import { FileDeleterManager } from './common/fileDeleterManager/fileDeleterManager';
+import { FileDeleterManager } from './fileDeleterManager/fileDeleterManager';
+
 
 @singleton()
 export class App {

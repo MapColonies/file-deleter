@@ -2,13 +2,12 @@ import { Logger } from '@map-colonies/js-logger';
 import { ITaskResponse, IUpdateTaskBody, TaskHandler } from '@map-colonies/mc-priority-queue';
 import { IConfig } from 'config';
 import { inject, injectable } from 'tsyringe';
-import { JOB_TYPE, SERVICES } from '../constants';
-import { Provider, TaskParameters, TaskResult } from '../interfaces';
+import { JOB_TYPE, SERVICES } from '../common/constants';
+import { Provider, TaskParameters, TaskResult } from '../common/interfaces';
 
 @injectable()
 export class FileDeleterManager {
   private readonly taskType: string;
-  private readonly waitTime: number;
   private readonly maxAttempts: number;
   private readonly taskPoolSize: number;
   private taskCounter: number;
@@ -21,7 +20,6 @@ export class FileDeleterManager {
   ) {
     this.taskType = this.config.get<string>('fileDeleter.task.type');
     this.maxAttempts = this.config.get<number>('fileDeleter.task.maxAttempts');
-    this.waitTime = this.config.get<number>('fileDeleter.waitTime');
     this.taskPoolSize = this.config.get<number>('fileDeleter.taskPoolSize');
     this.taskCounter = 0;
   }
@@ -63,7 +61,7 @@ export class FileDeleterManager {
       await this.rejectJobManager(taskResult.error!, task);
       this.logger.info({ msg: 'Updated failing the task in job manager', task: task.id });
     } catch (error) {
-      this.logger.error({ error, taskId: task.id, moddelId: task.parameters.modelId });
+      this.logger.error({ error, taskId: task.id, modelId: task.parameters.modelId });
     }
   }
 

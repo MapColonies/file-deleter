@@ -1,97 +1,111 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import {
+  CreateBucketCommandInput,
+  CreateBucketCommand,
+  S3Client,
+  S3ClientConfig,
+  PutObjectCommand,
+  PutObjectCommandInput,
+  DeleteBucketCommandInput,
+  DeleteBucketCommand,
+  DeleteObjectCommandInput,
+  DeleteObjectCommand,
+  ListObjectsRequest,
+  ListObjectsCommand,
+  HeadObjectCommand,
+} from '@aws-sdk/client-s3';
 import { randSentence } from '@ngneat/falso';
-import { S3 } from 'aws-sdk';
+import { inject, injectable } from 'tsyringe';
+import { SERVICES } from '../../src/common/constants';
 import { S3Config } from '../../src/common/interfaces';
 
+@injectable()
 export class S3Helper {
-  private readonly s3: S3;
+  private readonly s3: S3Client;
 
-  public constructor(private readonly config: S3Config) {
-    const s3ClientConfig: S3.ClientConfiguration = {
-      endpoint: config.endpointUrl,
+  public constructor(@inject(SERVICES.PROVIDER_CONFIG) protected readonly s3Config: S3Config) {
+    const s3ClientConfig: S3ClientConfig = {
+      endpoint: this.s3Config.endpointUrl,
+      forcePathStyle: this.s3Config.forcePathStyle,
       credentials: {
-        accessKeyId: config.accessKeyId,
-        secretAccessKey: config.secretAccessKey,
+        accessKeyId: this.s3Config.accessKeyId,
+        secretAccessKey: this.s3Config.secretAccessKey,
       },
-      maxRetries: config.maxAttempts,
-      sslEnabled: config.sslEnables,
-      s3ForcePathStyle: config.forcePathStyle,
+      region: this.s3Config.region,
     };
-    this.s3 = new S3(s3ClientConfig);
+    this.s3 = new S3Client(s3ClientConfig);
   }
 
-  public async initialize(): Promise<void> {
-    await this.createBucket(this.config.bucket);
-  }
-
-  public async terminate(): Promise<void> {
-    await this.clearBucket(this.config.bucket);
-    await this.deleteBucket(this.config.bucket);
-  }
-
-  public async createBucket(bucket: string): Promise<void> {
-    const params: S3.CreateBucketRequest = {
+  public async createBucket(bucket = this.s3Config.bucket): Promise<void> {
+    const params: CreateBucketCommandInput = {
       Bucket: bucket,
     };
-    await this.s3.createBucket(params).promise();
+    const command = new CreateBucketCommand(params);
+    await this.s3.send(command);
   }
 
-  public async deleteBucket(bucket: string): Promise<void> {
-    const params: S3.DeleteBucketRequest = {
+  public async deleteBucket(bucket = this.s3Config.bucket): Promise<void> {
+    const params: DeleteBucketCommandInput = {
       Bucket: bucket,
     };
-    await this.s3.deleteBucket(params).promise();
+    const command = new DeleteBucketCommand(params);
+    await this.s3.send(command);
   }
 
-  public async createFileOfModel(model: string, file: string): Promise<Buffer> {
-    const data = Buffer.from(randSentence());
-    const params: S3.PutObjectRequest = {
-      Bucket: this.config.bucket,
+  public async createFileOfModel(model: string, file: string): Promise<void> {
+    const params: PutObjectCommandInput = {
+      Bucket: this.s3Config.bucket,
       Key: `${model}/${file}`,
-      Body: data,
+      Body: Buffer.from(randSentence()),
     };
-    await this.s3.putObject(params).promise();
-    return data;
+    const command = new PutObjectCommand(params);
+    await this.s3.send(command);
   }
 
-  public async clearBucket(bucket: string): Promise<void> {
-    const paramsSource: S3.ListObjectsRequest = { Bucket: bucket };
-    const dataSource = await this.s3.listObjects(paramsSource).promise();
-    if (dataSource.Contents) {
-      for (const dataContent of dataSource.Contents) {
+  public async clearBucket(bucket = this.s3Config.bucket): Promise<void> {
+    const params: ListObjectsRequest = {
+      Bucket: bucket,
+    };
+    const listObject = new ListObjectsCommand(params);
+    const data = await this.s3.send(listObject);
+    if (data.Contents) {
+      for (const dataContent of data.Contents) {
         if (dataContent.Key != undefined) {
-          await this.deleteObject(bucket, dataContent.Key);
+          await this.deleteObject(dataContent.Key);
         }
       }
     }
   }
 
-  public async deleteObject(bucket: string, key: string): Promise<void> {
-    const params: S3.DeleteObjectRequest = {
-      Bucket: bucket,
+  public async deleteObject(key: string): Promise<void> {
+    const params: DeleteObjectCommandInput = {
+      Bucket: this.s3Config.bucket,
       Key: key,
     };
-    await this.s3.deleteObject(params).promise();
+    const command = new DeleteObjectCommand(params);
+    await this.s3.send(command);
   }
 
-  public async readFile(bucket: string, key: string): Promise<S3.Body | undefined> {
-    const params: S3.GetObjectAclRequest = {
-      Bucket: bucket,
-      Key: key,
+  public killS3(): void {
+    this.s3.destroy();
+  }
+
+  public async FileExist(bucketName: string, filePath: string): Promise<boolean> {
+    const params = {
+      Bucket: bucketName,
+      Key: filePath,
     };
-    const response = await this.s3.getObject(params).promise();
-    return response.Body;
-  }
 
-  public async ObjectExist(bucket: string, key: string): Promise<boolean> {
     try {
-      await this.s3.headObject({ Bucket: bucket, Key: key }).promise();
-      return true; // Object exists
-    } catch (error) {
-      if (error.code === 'NotFound') {
-        return false; // Object does not exist
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+      await this.s3.send(new HeadObjectCommand(params));
+      return true; // File exists
+    } catch (err) {
+      if (err === 'NotFound') {
+        return false; // File does not exist
       }
-      throw error; // Handle other errors
+      console.error('Error checking file existence:', err);
+      return false; // Assume file does not exist in case of an error
     }
   }
 }

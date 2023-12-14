@@ -5,25 +5,24 @@ import httpStatus from 'http-status-codes';
 import config from 'config';
 import { getApp } from '../../../src/app';
 import { SERVICES } from '../../../src/common/constants';
-import { NFSConfig, Provider } from '../../../src/common/interfaces';
+import { NFSConfig } from '../../../src/common/interfaces';
 import { NFSHelper } from '../../helpers/nfsHelper';
 import { AppError } from '../../../src/common/appError';
-import { NFSProvider } from '../../../src/common/providers/nfsProvider';
-
+import { NFSProvider } from '../../../src/providers/nfsProvider';
 
 describe('NFSProvider', () => {
-  let provider: Provider;
+  let provider: NFSProvider;
   const nfsConfig = config.get<NFSConfig>('NFS');
   let nfsHelper: NFSHelper;
 
   beforeAll(() => {
     getApp({
       override: [
+        { token: SERVICES.PROVIDER_CONFIG, provider: { useValue: nfsConfig } },
         { token: SERVICES.LOGGER, provider: { useValue: jsLogger({ enabled: false }) } },
       ],
     });
-
-    provider = container.resolve(SERVICES.PROVIDER_CONFIG);
+    provider = container.resolve(NFSProvider);
     nfsHelper = new NFSHelper(nfsConfig);
   });
 
@@ -37,7 +36,7 @@ describe('NFSProvider', () => {
   });
 
   describe('deleteFile', () => {
-    it('Should delete an existing file from S3', async () => {
+    it('Should delete an existing file from NFS', async () => {
       const model = randWord();
       const file = `${randWord()}.${randFileExt()}`;
       await nfsHelper.createFileOfModel(model, file);
@@ -50,7 +49,7 @@ describe('NFSProvider', () => {
       expect(fileExists).toBe(false);
     });
 
-    it('Should handle deleting non-existing file in S3', async () => {
+    it('Should handle deleting non-existing file in NFS', async () => {
       const nonExistingFilePath = 'non-existing-file.txt';
 
       await expect(provider.deleteFile(nonExistingFilePath)).rejects.toThrow(
@@ -61,4 +60,5 @@ describe('NFSProvider', () => {
       expect(fileExists).toBe(false);
     });
   });
-});
+  });
+  

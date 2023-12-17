@@ -60,5 +60,4 @@ describe('NFSProvider', () => {
       expect(fileExists).toBe(false);
     });
   });
-  });
-  
+});

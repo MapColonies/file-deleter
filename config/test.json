@@ -21,19 +21,19 @@
     "url": "http://127.0.0.1:8082",
     "waitTime": 3000
   },
-  "provider": "NFS",
+  "provider": "S3",
   "S3": {
-    "accessKeyId": "minio",
-    "secretAccessKey": "minio",
+    "accessKeyId": "minioadmin",
+    "secretAccessKey": "minioadmin",
     "endpointUrl": "http://127.0.0.1:9000",
-    "bucket": "3dtiles-dest",
-    "region": "us-east-1",
+    "bucket": "test",
+    "region": "aws-global",
     "forcePathStyle": true,
     "sslEnabled": false,
     "maxAttempts": 3
   },
   "NFS": {
-    "pvPath": "/home/netanel/3DModels"
+    "pvPath": "./tests/helpers/3DModels"
   },
   "fileDeleter": {
     "job": {

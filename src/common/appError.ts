@@ -12,6 +12,6 @@ export class AppError extends Error {
     this.status = status;
     this.isOperational = isOperational;
 
-    Error.captureStackTrace(this);
+    // Error.captureStackTrace(this);
   }
 }

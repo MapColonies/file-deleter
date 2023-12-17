@@ -13,6 +13,8 @@ import {
   ListObjectsRequest,
   ListObjectsCommand,
   HeadObjectCommand,
+  GetObjectCommandInput,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import { randSentence } from '@ngneat/falso';
 import { S3Config } from '../../src/common/interfaces';
@@ -30,7 +32,6 @@ export class S3Helper {
       },
       region: this.config.region,
     };
-    console.log("CONFIG: ", s3ClientConfig)
     this.s3 = new S3Client(s3ClientConfig);
   }
 
@@ -38,7 +39,6 @@ export class S3Helper {
     const params: CreateBucketCommandInput = {
       Bucket: bucket,
     };
-    console.log("PARAMS: ", params);
     const command = new CreateBucketCommand(params);
     await this.s3.send(command);
   }
@@ -51,14 +51,16 @@ export class S3Helper {
     await this.s3.send(command);
   }
 
-  public async createFileOfModel(model: string, file: string): Promise<void> {
+  public async createFileOfModel(model: string, file: string): Promise<string> {
+    const data = Buffer.from(randSentence());
     const params: PutObjectCommandInput = {
       Bucket: this.config.bucket,
       Key: `${model}/${file}`,
-      Body: Buffer.from(randSentence()),
+      Body: data,
     };
-    const command = new PutObjectCommand(params);
-    await this.s3.send(command);
+    await this.s3.send(new PutObjectCommand(params));
+    const s3Content = data.toString('utf-8');
+    return s3Content;
   }
 
   public async clearBucket(bucket = this.config.bucket): Promise<void> {
@@ -70,41 +72,43 @@ export class S3Helper {
     if (data.Contents) {
       for (const dataContent of data.Contents) {
         if (dataContent.Key != undefined) {
-          await this.deleteObject(dataContent.Key);
+          await this.deleteObject(bucket, dataContent.Key);
         }
       }
     }
   }
 
-  public async deleteObject(key: string): Promise<void> {
+  public async deleteObject(bucket: string, key: string): Promise<void> {
     const params: DeleteObjectCommandInput = {
-      Bucket: this.config.bucket,
+      Bucket: bucket,
       Key: key,
     };
     const command = new DeleteObjectCommand(params);
     await this.s3.send(command);
   }
 
-  public killS3(): void {
-    this.s3.destroy();
+  public async readFile(bucket: string, key: string): Promise<Buffer | undefined> {
+    const params: GetObjectCommandInput = {
+      Bucket: bucket,
+      Key: key,
+    };
+    const response = await this.s3.send(new GetObjectCommand(params));
+    return response.Body?.transformToString() as unknown as Buffer;
   }
 
-  public async FileExist(bucketName: string, filePath: string): Promise<boolean> {
+  public async fileExists(bucket: string, filePath: string): Promise<boolean> {
     const params = {
-      Bucket: bucketName,
+      Bucket: bucket,
       Key: filePath,
     };
 
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-      await this.s3.send(new HeadObjectCommand(params));
-      return true; // File exists
-    } catch (err) {
-      if (err === 'NotFound') {
+    return this.s3
+      .send(new HeadObjectCommand(params))
+      .then(() => {
+        return true; // File exists
+      })
+      .catch((error) => {
         return false; // File does not exist
-      }
-      console.error('Error checking file existence:', err);
-      return false; // Assume file does not exist in case of an error
-    }
+      });
   }
 }

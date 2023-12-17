@@ -10,8 +10,8 @@ import { SERVICES } from '../common/constants';
 export class NFSProvider implements Provider {
   public constructor(
     @inject(SERVICES.LOGGER) protected readonly logger: Logger,
-    @inject(SERVICES.PROVIDER_CONFIG) protected readonly config: NFSConfig,
-    ) {}
+    @inject(SERVICES.PROVIDER_CONFIG) protected readonly config: NFSConfig
+  ) {}
 
   public async deleteFile(filePath: string): Promise<void> {
     const pvPath = this.config.pvPath;

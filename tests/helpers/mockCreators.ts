@@ -2,7 +2,6 @@ import { ITaskResponse, OperationStatus } from '@map-colonies/mc-priority-queue'
 import { randUuid, randWord } from '@ngneat/falso';
 import { TaskParameters } from '../../src/common/interfaces';
 
-
 export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<TaskParameters> => {
   return {
     id: randUuid(),

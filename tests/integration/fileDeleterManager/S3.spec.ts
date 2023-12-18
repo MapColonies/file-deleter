@@ -25,6 +25,7 @@ describe('fileDeleterManager S3', () => {
     });
     fileDeleterManager = container.resolve(FileDeleterManager);
     s3Helper = new S3Helper(s3Config);
+    console.log(s3Config)
   });
 
   beforeEach(async () => {

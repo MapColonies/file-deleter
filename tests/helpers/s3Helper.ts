@@ -111,4 +111,8 @@ export class S3Helper {
         return false; // File does not exist
       });
   }
+  
+  public killS3(): void {
+    this.s3.destroy();
+  }
 }

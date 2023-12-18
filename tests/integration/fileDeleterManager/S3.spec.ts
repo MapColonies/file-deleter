@@ -81,40 +81,5 @@ describe('fileDeleterManager S3', () => {
 
       expect(taskHandlerMock.dequeue).toHaveBeenCalledWith(JOB_TYPE, fileDeleterManager['taskType']);
     });
-
-    // it(`When can't read file, should increase task's retry and update job manager`, async () => {
-    //   const model = randWord();
-    //   const file1 = `${randWord()}.${randFileExt()}`;
-    //   const file2 = `${randWord()}.${randFileExt()}`;
-    //   await s3Helper.createFileOfModel(model, file1);
-    //   const paths = [`${model}/${file1}`, `${model}/${file2}`];
-    //   const task = createTask(model, paths);
-
-    //   taskHandlerMock.dequeue.mockResolvedValue(task);
-    //   taskHandlerMock.reject.mockResolvedValue(null);
-
-    //   await fileDeleterManager.start();
-
-    //   expect(taskHandlerMock.ack).not.toHaveBeenCalled();
-    //   expect(taskHandlerMock.reject).toHaveBeenCalled();
-    // });
-
-    //   it(`When can't update job manager, should finish the function`, async () => {
-    //     const model = randWord();
-    //     const file1 = `${randWord()}.${randFileExt()}`;
-    //     const file2 = `${randWord()}.${randFileExt()}`;
-    //     await s3Helper.createFileOfModel(model, file1);
-    //     const paths = [`${model}/${file1}`, `${model}/${file2}`];
-    //     const task = createTask(model, paths);
-    //     taskHandlerMock.dequeue.mockResolvedValue(task);
-    //     taskHandlerMock.reject.mockRejectedValue(new Error('error with job manager'));
-
-    //     await fileDeleterManager.start();
-
-    //     expect(taskHandlerMock.ack).not.toHaveBeenCalled();
-    //     expect(taskHandlerMock.reject).toHaveBeenCalled();
-    //   });
-    //   });
-    // });
   });
 });

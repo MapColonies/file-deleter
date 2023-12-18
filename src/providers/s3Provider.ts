@@ -48,10 +48,10 @@ export class S3Provider implements Provider {
     try {
       await this.s3.send(new HeadObjectCommand(params));
       this.logger.error(`File ${filePath} exists in the bucket.`);
-      return true; // File exists
+      return true;
     } catch (error) {
       this.logger.error(`File ${filePath} does not exist in the bucket`);
-      return false; // File does not exist
+      return false;
     }
   }
 

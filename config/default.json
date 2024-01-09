@@ -13,5 +13,41 @@
       "url": "http://telemetryUrl/metrics",
       "interval": "3"
     }
+  },
+  "jobManager": {
+    "url": "http://127.0.0.1:8080"
+  },
+  "heartbeat": {
+    "url": "http://127.0.0.1:8082",
+    "waitTime": 3000
+  },
+  "provider": "NFS",
+  "S3": {
+    "type": "S3",
+    "accessKeyId": "raster",
+    "secretAccessKey": "rasterPassword",
+    "endPointUrl": "http://10.8.0.9:9000",
+    "bucket": "3dtiles",
+    "region": "ui-east-1",
+    "storageClass": "STANDARD",
+    "forcePathStyle": true,
+    "tls": false,
+    "maxAttempts": 3,
+    "sigVersion": "v4"
+  },
+  "NFS": {
+    "pvPath": "/home/netanel/3DModels"
+  },
+  "fileDeleter": {
+    "job": {
+      "type": "Deleting_3D_Model"
+    },
+    "task": {
+      "type": "tilesDeleting",
+      "maxAttempts": 3
+    },
+    "waitTime": 5000,
+    "intervalMs": 5000,
+    "taskPoolSize": 1
   }
 }

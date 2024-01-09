@@ -23,14 +23,17 @@
   },
   "provider": "NFS",
   "S3": {
-    "accessKeyId": "minio",
-    "secretAccessKey": "minio",
-    "endpointUrl": "http://10.8.0.9:9000",
-    "bucket": "3dtiles-dest",
-    "region": "us-east-1",
+    "type": "S3",
+    "accessKeyId": "raster",
+    "secretAccessKey": "rasterPassword",
+    "endPointUrl": "http://10.8.0.9:9000",
+    "bucket": "3dtiles",
+    "region": "ui-east-1",
+    "storageClass": "STANDARD",
     "forcePathStyle": true,
-    "sslEnabled": false,
-    "maxAttempts": 3
+    "tls": false,
+    "maxAttempts": 3,
+    "sigVersion": "v4"
   },
   "NFS": {
     "pvPath": "/home/netanel/3DModels"

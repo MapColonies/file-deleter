@@ -57,7 +57,7 @@ export class S3Provider implements Provider {
 
   private createS3Instance(config: S3Config): S3Client {
     return new S3Client({
-      endpoint: config.endpointUrl,
+      endpoint: config.endPointUrl,
       credentials: {
         accessKeyId: config.accessKeyId,
         secretAccessKey: config.secretAccessKey,

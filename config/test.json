@@ -25,7 +25,7 @@
   "S3": {
     "accessKeyId": "minioadmin",
     "secretAccessKey": "minioadmin",
-    "endpointUrl": "http://127.0.0.1:9000",
+    "endPointUrl": "http://127.0.0.1:9000",
     "bucket": "3dtiles",
     "region": "aws-global",
     "forcePathStyle": true,
@@ -38,7 +38,7 @@
   },
   "fileDeleter": {
     "job": {
-      "type": "Deleting_3D_Model"
+      "type": "Delete_3D_Model"
     },
     "task": {
       "type": "tilesDeleting",

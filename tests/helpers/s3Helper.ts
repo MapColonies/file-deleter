@@ -24,7 +24,7 @@ export class S3Helper {
 
   public constructor(private readonly config: S3Config) {
     const s3ClientConfig: S3ClientConfig = {
-      endpoint: this.config.endpointUrl,
+      endpoint: this.config.endPointUrl,
       forcePathStyle: this.config.forcePathStyle,
       credentials: {
         accessKeyId: this.config.accessKeyId,

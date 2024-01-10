@@ -14,7 +14,7 @@ export interface TaskParameters {
 export interface S3Config {
   accessKeyId: string;
   secretAccessKey: string;
-  endpointUrl: string;
+  endPointUrl: string;
   bucket: string;
   region: string;
   tls: boolean;

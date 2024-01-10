@@ -23,6 +23,7 @@
   },
   "provider": "S3",
   "S3": {
+    "type": "S3",
     "accessKeyId": "raster",
     "secretAccessKey": "rasterPassword",
     "endPointUrl": "http://10.8.0.9:9000",

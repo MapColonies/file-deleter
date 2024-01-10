@@ -102,14 +102,17 @@ export class S3Helper {
       Key: filePath,
     };
 
-    return this.s3
-      .send(new HeadObjectCommand(params))
-      .then(() => {
-        return true; // File exists
-      })
-      .catch((error) => {
-        return false; // File does not exist
-      });
+    return (
+      this.s3
+        .send(new HeadObjectCommand(params))
+        .then(() => {
+          return true; // File exists
+        })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .catch((error) => {
+          return false; // File does not exist
+        })
+    );
   }
 
   public killS3(): void {

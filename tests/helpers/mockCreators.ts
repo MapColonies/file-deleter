@@ -1,7 +1,7 @@
 import { ITaskResponse, OperationStatus } from '@map-colonies/mc-priority-queue';
 import { randPastDate, randSoonDate, randUuid, randWord } from '@ngneat/falso';
 import { TaskParameters } from '../../src/common/interfaces';
-import { TASK_TYPE } from '../../src/common/constants'
+import { TASK_TYPE } from '../../src/common/constants';
 
 export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<TaskParameters> => {
   return {

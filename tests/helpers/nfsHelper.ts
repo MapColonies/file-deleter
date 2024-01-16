@@ -31,7 +31,7 @@ export class NFSHelper {
   public async fileExists(filePath: string): Promise<boolean> {
     try {
       await fs.promises.access(filePath);
-      return true; 
+      return true;
     } catch (error) {
       return false;
     }

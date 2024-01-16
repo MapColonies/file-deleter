@@ -67,15 +67,15 @@
       }
     },
     "waitTime": {
-      "__name": "FILE_SYNCER_WAIT_TIME",
+      "__name": "FILE_DELETER_WAIT_TIME",
       "__format": "number"
     },
     "intervalMs": {
-      "__name": "FILE_SYNCER_INTERVAL_MS",
+      "__name": "FILE_DELETER_INTERVAL_MS",
       "__format": "number"
     },
     "taskPoolSize": {
-      "__name": "FILE_SYNCER_TASK_POOL_SIZE",
+      "__name": "FILE_DELETER_TASK_POOL_SIZE",
       "__format": "number"
     }
   }

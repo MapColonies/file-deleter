@@ -1,6 +1,7 @@
 import { ITaskResponse, OperationStatus } from '@map-colonies/mc-priority-queue';
-import { randUuid, randWord } from '@ngneat/falso';
+import { randPastDate, randSoonDate, randUuid, randWord } from '@ngneat/falso';
 import { TaskParameters } from '../../src/common/interfaces';
+import { TASK_TYPE } from '../../src/common/constants'
 
 export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<TaskParameters> => {
   return {
@@ -8,9 +9,9 @@ export const createTask = (modelId?: string, paths?: string[]): ITaskResponse<Ta
     jobId: randUuid(),
     description: randWord(),
     parameters: createTaskParameters(modelId, paths),
-    created: '2020',
-    updated: '2022',
-    type: 'tilesDeleting',
+    created: randPastDate().toString(),
+    updated: randSoonDate().toString(),
+    type: TASK_TYPE,
     status: OperationStatus.IN_PROGRESS,
     reason: randWord(),
     attempts: 0,

@@ -20,9 +20,9 @@ export class S3Provider implements Provider {
 
   public async deleteFile(filePath: string): Promise<void> {
     const bucketName = this.s3Config.bucket;
-    const result = await this.fileExists(filePath);
+    const result = await this.isFileExist(filePath);
     if (!result) {
-      throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exists in the agreed folder`, true);
+      throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exist in the agreed folder`, true);
     }
     try {
       await this.s3.send(
@@ -31,7 +31,7 @@ export class S3Provider implements Provider {
           Key: filePath,
         })
       );
-      await this.fileExists(filePath);
+      await this.isFileExist(filePath);
       this.logger.debug(`File deleted successfully from S3: ${filePath}`);
     } catch (error) {
       this.logger.error(`Error deleting file from S3 - ${filePath}`);
@@ -39,7 +39,7 @@ export class S3Provider implements Provider {
     }
   }
 
-  private async fileExists(filePath: string): Promise<boolean> {
+  private async isFileExist(filePath: string): Promise<boolean> {
     const params = {
       Bucket: this.s3Config.bucket,
       Key: filePath,

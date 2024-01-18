@@ -19,15 +19,14 @@ export class S3Provider implements Provider {
   }
 
   public async deleteFile(filePath: string): Promise<void> {
-    const bucketName = this.s3Config.bucket;
-    const result = await this.isFileExist(filePath);
-    if (!result) {
+    const isFileExists = await this.isFileExist(filePath);
+    if (!isFileExists) {
       throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exist in the agreed folder`, true);
     }
     try {
       await this.s3.send(
         new DeleteObjectCommand({
-          Bucket: bucketName,
+          Bucket: this.s3Config.bucket,
           Key: filePath,
         })
       );

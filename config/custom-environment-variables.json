@@ -30,7 +30,7 @@
       "__format": "number"
     }
   },
-  "provider": "PROVIDER_FROM",
+  "provider": "PROVIDER_TO",
   "S3": {
     "accessKeyId": "S3_DEST_ACCESS_KEY_ID",
     "secretAccessKey": "S3_DEST_SECRET_ACCESS_KEY",

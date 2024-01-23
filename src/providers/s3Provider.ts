@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { DeleteObjectCommand, HeadObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Logger } from '@map-colonies/js-logger';
-import httpStatus from 'http-status-codes';
 import { inject, injectable } from 'tsyringe';
 import { Provider, S3Config } from '../common/interfaces';
-import { AppError } from '../common/appError';
 import { SERVICES } from '../common/constants';
 
 @injectable()
@@ -19,10 +17,6 @@ export class S3Provider implements Provider {
   }
 
   public async deleteFile(filePath: string): Promise<void> {
-    const isFileExists = await this.isFileExist(filePath);
-    if (!isFileExists) {
-      throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exist in the agreed folder`, true);
-    }
     try {
       await this.s3.send(
         new DeleteObjectCommand({

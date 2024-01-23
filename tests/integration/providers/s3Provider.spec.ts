@@ -1,14 +1,12 @@
 import jsLogger from '@map-colonies/js-logger';
 import config from 'config';
 import { randFileExt, randWord } from '@ngneat/falso';
-import httpStatus from 'http-status-codes';
 import { container } from 'tsyringe';
 import { S3Helper } from '../../helpers/s3Helper';
 import { SERVICES } from '../../../src/common/constants';
 import { getApp } from '../../../src/app';
 import { S3Provider } from '../../../src/providers/s3Provider';
 import { S3Config } from '../../../src/common/interfaces';
-import { AppError } from '../../../src/common/appError';
 
 jest.useFakeTimers();
 

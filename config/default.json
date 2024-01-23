@@ -31,7 +31,6 @@
     "region": "ui-east-1",
     "storageClass": "STANDARD",
     "forcePathStyle": true,
-    "tls": false,
     "maxAttempts": 3,
     "sigVersion": "v4"
   },

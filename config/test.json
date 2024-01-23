@@ -10,11 +10,10 @@
   "S3": {
     "accessKeyId": "minioadmin",
     "secretAccessKey": "minioadmin",
-    "endPointUrl": "http://127.0.0.1:9000",
+    "endpointUrl": "http://127.0.0.1:9000",
     "bucket": "3dtiles",
     "region": "aws-global",
     "forcePathStyle": true,
-    "tls": false,
     "maxAttempts": 4,
     "sigVersion": "v4"
   },

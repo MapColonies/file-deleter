@@ -21,7 +21,17 @@
     }
   },
   "jobManager": {
-    "url": "JOB_MANAGER_URL"
+    "url": "JOB_MANAGER_URL",
+    "job": {
+      "type": "DELETE_JOB"
+    },
+    "task": {
+      "type": "DELETE_TASK",
+      "maxAttempts": {
+        "__name": "TASK_MAX_ATTEMPTS",
+        "__format": "number"
+      }
+    }
   },
   "heartbeat": {
     "url": "HEARTBEAT_URL",
@@ -56,16 +66,6 @@
     "pvPath": "PV_DEST_PATH"
   },
   "fileDeleter": {
-    "job": {
-      "type": "DELETE_JOB"
-    },
-    "task": {
-      "type": "DELETE_TASK",
-      "maxAttempts": {
-        "__name": "TASK_MAX_ATTEMPTS",
-        "__format": "number"
-      }
-    },
     "waitTime": {
       "__name": "FILE_DELETER_WAIT_TIME",
       "__format": "number"

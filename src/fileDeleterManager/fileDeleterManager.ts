@@ -18,8 +18,8 @@ export class FileDeleterManager {
     @inject(SERVICES.TASK_HANDLER) private readonly taskHandler: TaskHandler,
     @inject(SERVICES.PROVIDER) private readonly provider: Provider
   ) {
-    this.taskType = this.config.get<string>('fileDeleter.task.type');
-    this.maxAttempts = this.config.get<number>('fileDeleter.task.maxAttempts');
+    this.taskType = this.config.get<string>('jobManager.task.type');
+    this.maxAttempts = this.config.get<number>('jobManager.task.maxAttempts');
     this.taskPoolSize = this.config.get<number>('fileDeleter.taskPoolSize');
     this.taskCounter = 0;
   }

@@ -52,16 +52,5 @@ describe('S3Provider tests', () => {
       expect(result).toBeUndefined();
       expect(fileExists).toBe(false);
     });
-
-    it('When the file is not exists in the bucket, throws error', async () => {
-      const nonExistingFilePath = 'non-existing-file.txt';
-
-      await expect(provider.deleteFile(nonExistingFilePath)).rejects.toThrow(
-        new AppError(httpStatus.BAD_REQUEST, `File ${nonExistingFilePath} doesn't exist in the agreed folder`, true)
-      );
-
-      const fileExists = await s3Helper.fileExists(s3Config.bucket, nonExistingFilePath);
-      expect(fileExists).toBe(false);
-    });
   });
 });

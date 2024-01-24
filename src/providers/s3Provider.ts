@@ -33,7 +33,7 @@ export class S3Provider implements Provider {
 
   private createS3Instance(config: S3Config): S3Client {
     return new S3Client({
-      endpoint: config.endPointUrl,
+      endpoint: config.endpointUrl,
       credentials: {
         accessKeyId: config.accessKeyId,
         secretAccessKey: config.secretAccessKey,

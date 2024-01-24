@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { DeleteObjectCommand, HeadObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Logger } from '@map-colonies/js-logger';
 import { inject, injectable } from 'tsyringe';
 import { Provider, S3Config } from '../common/interfaces';
@@ -24,27 +24,10 @@ export class S3Provider implements Provider {
           Key: filePath,
         })
       );
-      await this.isFileExist(filePath);
       this.logger.debug(`File deleted successfully from S3: ${filePath}`);
     } catch (error) {
       this.logger.error(`Error deleting file from S3 - ${filePath}`);
       throw error;
-    }
-  }
-
-  private async isFileExist(filePath: string): Promise<boolean> {
-    const params = {
-      Bucket: this.s3Config.bucket,
-      Key: filePath,
-    };
-
-    try {
-      await this.s3.send(new HeadObjectCommand(params));
-      this.logger.error(`File ${filePath} exists in the bucket.`);
-      return true;
-    } catch (error) {
-      this.logger.error(`File ${filePath} does not exist in the bucket`);
-      return false;
     }
   }
 

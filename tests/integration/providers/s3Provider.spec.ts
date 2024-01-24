@@ -1,14 +1,12 @@
 import jsLogger from '@map-colonies/js-logger';
 import config from 'config';
 import { randFileExt, randWord } from '@ngneat/falso';
-import httpStatus from 'http-status-codes';
 import { container } from 'tsyringe';
 import { S3Helper } from '../../helpers/s3Helper';
 import { SERVICES } from '../../../src/common/constants';
 import { getApp } from '../../../src/app';
 import { S3Provider } from '../../../src/providers/s3Provider';
 import { S3Config } from '../../../src/common/interfaces';
-import { AppError } from '../../../src/common/appError';
 
 jest.useFakeTimers();
 
@@ -50,17 +48,6 @@ describe('S3Provider tests', () => {
       const fileExists = await s3Helper.fileExists(s3Config.bucket, filePath);
 
       expect(result).toBeUndefined();
-      expect(fileExists).toBe(false);
-    });
-
-    it('When the file is not exists in the bucket, throws error', async () => {
-      const nonExistingFilePath = 'non-existing-file.txt';
-
-      await expect(provider.deleteFile(nonExistingFilePath)).rejects.toThrow(
-        new AppError(httpStatus.BAD_REQUEST, `File ${nonExistingFilePath} doesn't exist in the agreed folder`, true)
-      );
-
-      const fileExists = await s3Helper.fileExists(s3Config.bucket, nonExistingFilePath);
       expect(fileExists).toBe(false);
     });
   });

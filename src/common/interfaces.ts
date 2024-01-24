@@ -17,7 +17,7 @@ export interface S3Config {
   endPointUrl: string;
   bucket: string;
   region: string;
-  tls: boolean;
+  sslEnabled: boolean;
   forcePathStyle: boolean;
   maxAttempts: number;
   sigVersion: string;

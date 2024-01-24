@@ -14,7 +14,7 @@
     "bucket": "3dtiles",
     "region": "aws-global",
     "forcePathStyle": true,
-    "tls": false,
+    "sslEnabled": false,
     "maxAttempts": 4,
     "sigVersion": "v4"
   },

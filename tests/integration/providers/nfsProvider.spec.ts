@@ -49,7 +49,7 @@ describe('NFSProvider', () => {
       expect(fileExists).toBe(false);
     });
 
-    it('Should throw error of non-existing file when trying to delete from NFS', async () => {
+    it('Should throw error when trying to delete nonExisting file from NFS', async () => {
       const nonExistingFilePath = 'non-existing-file.txt';
 
       await expect(provider.deleteFile(nonExistingFilePath)).rejects.toThrow(

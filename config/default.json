@@ -29,11 +29,9 @@
     "endpointUrl": "http://10.8.0.9:9000",
     "bucket": "3dtiles",
     "region": "ui-east-1",
-    "storageClass": "STANDARD",
     "forcePathStyle": true,
     "sslEnabled": false,
-    "maxAttempts": 3,
-    "sigVersion": "v4"
+    "maxAttempts": 3
   },
   "NFS": {
     "pvPath": "/home/netanel/3DModels"

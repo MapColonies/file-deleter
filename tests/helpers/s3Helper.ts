@@ -106,11 +106,11 @@ export class S3Helper {
       this.s3
         .send(new HeadObjectCommand(params))
         .then(() => {
-          return true; // File exists
+          return true;
         })
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .catch((error) => {
-          return false; // File does not exist
+          return false;
         })
     );
   }

@@ -15,8 +15,7 @@
     "region": "aws-global",
     "forcePathStyle": true,
     "sslEnabled": false,
-    "maxAttempts": 4,
-    "sigVersion": "v4"
+    "maxAttempts": 4
   },
   "NFS": {
     "pvPath": "./tests/helpers/3DModels"

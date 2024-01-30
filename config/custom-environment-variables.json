@@ -48,8 +48,7 @@
     "maxAttempts": {
       "__name": "S3_DEST_MAX_ATTEMPTS",
       "__format": "number"
-    },
-    "pvPath": "PV_DEST_PATH"
+    }
   },
   "NFS": {
     "pvPath": "PV_DEST_PATH"

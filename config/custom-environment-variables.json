@@ -49,10 +49,9 @@
       "__name": "S3_DEST_MAX_ATTEMPTS",
       "__format": "number"
     },
-    "sigVersion": "S3_DEST_SIG_VERSION",
     "pvPath": "PV_DEST_PATH"
   },
-  "nfs": {
+  "NFS": {
     "pvPath": "PV_DEST_PATH"
   },
   "fileDeleter": {

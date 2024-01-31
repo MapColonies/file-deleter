@@ -23,10 +23,10 @@
   "jobManager": {
     "url": "JOB_MANAGER_URL",
     "job": {
-      "type": "DELETE_JOB"
+      "type": "DELETE_JOB_TYPE"
     },
     "task": {
-      "type": "DELETE_TASK",
+      "type": "DELETE_TASK_TYPE",
       "maxAttempts": {
         "__name": "TASK_MAX_ATTEMPTS",
         "__format": "number"

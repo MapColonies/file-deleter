@@ -41,7 +41,7 @@
       "type": "Delete_3D_Model"
     },
     "task": {
-      "type": "tilesDeleting",
+      "type": "tilsDeleting",
       "maxAttempts": 3
     },
     "waitTime": 5000,

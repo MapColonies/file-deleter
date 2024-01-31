@@ -21,8 +21,8 @@
     "bucket": "3dtiles",
     "region": "aws-global",
     "forcePathStyle": true,
-    "maxAttempts": 4,
-    "sigVersion": "v4"
+    "sslEnabled": false,
+    "maxAttempts": 4
   },
   "NFS": {
     "pvPath": "./tests/helpers/3DModels"

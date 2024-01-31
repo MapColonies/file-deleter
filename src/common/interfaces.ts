@@ -1,5 +1,3 @@
-import { StorageClass } from '@aws-sdk/client-s3';
-
 export interface IConfig {
   get: <T>(setting: string) => T;
   has: (setting: string) => boolean;
@@ -17,10 +15,10 @@ export interface S3Config {
   endpointUrl: string;
   bucket: string;
   region: string;
+  sslEnabled: boolean;
   forcePathStyle: boolean;
   maxAttempts: number;
   sigVersion: string;
-  storageClass?: StorageClass;
 }
 
 export interface NFSConfig {

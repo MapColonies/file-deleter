@@ -19,5 +19,62 @@
       "url": "TELEMETRY_METRICS_URL",
       "interval": "TELEMETRY_METRICS_INTERVAL"
     }
+  },
+  "jobManager": {
+    "url": "JOB_MANAGER_URL"
+  },
+  "heartbeat": {
+    "url": "HEARTBEAT_URL",
+    "waitTime": {
+      "__name": "HEARTBEAT_WAIT_TIME",
+      "__format": "number"
+    }
+  },
+  "provider": "PROVIDER_TO",
+  "S3": {
+    "accessKeyId": "S3_DEST_ACCESS_KEY_ID",
+    "secretAccessKey": "S3_DEST_SECRET_ACCESS_KEY",
+    "endPointUrl": "S3_DEST_END_POINT_URL",
+    "bucket": "S3_DEST_BUCKET",
+    "region": "S3_DEST_REGION",
+    "forcePathStyle": {
+      "__name": "S3_DEST_FORCE_PATH_STYLE",
+      "__format": "boolean"
+    },
+    "sslEnabled": {
+      "__name": "S3_DEST_SSL_ENABLED",
+      "__format": "boolean"
+    },
+    "maxAttempts": {
+      "__name": "S3_DEST_MAX_ATTEMPTS",
+      "__format": "number"
+    }
+  },
+  "NFS": {
+    "pvPath": "PV_DEST_PATH"
+  },
+  "fileDeleter": {
+    "job": {
+      "type": "DELETE_JOB_TYPE"
+    },
+    "task": {
+      "type": "DELETE_TASK_TYPE",
+      "maxAttempts": {
+        "__name": "TASK_MAX_ATTEMPTS",
+        "__format": "number"
+      }
+    },
+    "waitTime": {
+      "__name": "FILE_DELETER_WAIT_TIME",
+      "__format": "number"
+    },
+    "intervalMs": {
+      "__name": "FILE_DELETER_INTERVAL_MS",
+      "__format": "number"
+    },
+    "taskPoolSize": {
+      "__name": "FILE_DELETER_TASK_POOL_SIZE",
+      "__format": "number"
+    }
   }
 }

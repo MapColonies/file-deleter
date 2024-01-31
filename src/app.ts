@@ -1,40 +1,26 @@
 import { Logger } from '@map-colonies/js-logger';
 import { inject, singleton } from 'tsyringe';
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
-import { Argv } from 'yargs';
+import { IConfig } from 'config';
 import { SERVICES } from './common/constants';
-import { SayCommand } from './sayCommand/sayCommand';
 import { registerExternalValues, RegisterOptions } from './containerConfig';
-import { HelloWorldCommand } from './helloWorldCommand/helloWorldCommand';
+import { FileDeleterManager } from './fileDeleterManager/fileDeleterManager';
 
 @singleton()
 export class App {
-  public cli: Argv;
-
+  private readonly intervalMs: number;
   public constructor(
     @inject(SERVICES.LOGGER) private readonly logger: Logger,
-    private readonly sayCommand: SayCommand,
-    private readonly helloWorldCommand: HelloWorldCommand
+    @inject(SERVICES.CONFIG) private readonly config: IConfig,
+    private readonly fileDeleterManager: FileDeleterManager
   ) {
-    this.cli = this.createYargsCli();
+    this.intervalMs = this.config.get<number>('fileDeleter.intervalMs');
   }
-
-  public async run(args: string[]): Promise<void> {
-    await Promise.resolve(this.cli.parse(hideBin(args)));
-  }
-
-  private createYargsCli(): Argv {
-    return yargs()
-      .usage('Usage: $0 <command> [options]')
-      .command(this.helloWorldCommand)
-      .command(this.sayCommand)
-      .help('h')
-      .alias('h', 'help')
-      .strict();
+  public run(): void {
+    this.logger.info({ msf: 'Starting fileDeleter' });
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    setInterval(async () => this.fileDeleterManager.start(), this.intervalMs);
   }
 }
-
 export function getApp(registerOptions?: RegisterOptions): App {
   const container = registerExternalValues(registerOptions);
   const app = container.resolve(App);

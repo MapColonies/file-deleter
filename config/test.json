@@ -1,1 +1,35 @@
-{}
+{
+  "jobManager": {
+    "url": "http://127.0.0.1:8080"
+  },
+  "heartbeat": {
+    "url": "http://127.0.0.1:8082",
+    "waitTime": 3000
+  },
+  "provider": "S3",
+  "S3": {
+    "accessKeyId": "minioadmin",
+    "secretAccessKey": "minioadmin",
+    "endpointUrl": "http://127.0.0.1:9000",
+    "bucket": "3dtiles",
+    "region": "aws-global",
+    "forcePathStyle": true,
+    "sslEnabled": false,
+    "maxAttempts": 4
+  },
+  "NFS": {
+    "pvPath": "./tests/helpers/3DModels"
+  },
+  "fileDeleter": {
+    "job": {
+      "type": "Delete_3D_Model"
+    },
+    "task": {
+      "type": "tilesDeleting",
+      "maxAttempts": 3
+    },
+    "waitTime": 5000,
+    "intervalMs": 5000,
+    "taskPoolSize": 1
+  }
+}

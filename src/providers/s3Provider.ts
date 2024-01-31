@@ -27,7 +27,7 @@ export class S3Provider implements Provider {
       this.logger.debug(`File deleted successfully from S3: ${filePath}`);
     } catch (error) {
       this.logger.error(`Error deleting file from S3 - ${filePath}`);
-      throw error;
+      throw new Error(`Deleting failed: ${filePath}`);
     }
   }
 

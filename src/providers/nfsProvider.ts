@@ -16,9 +16,6 @@ export class NFSProvider implements Provider {
   public async deleteFile(filePath: string): Promise<void> {
     const pvPath = this.config.pvPath;
     const fullPath = `${pvPath}/${filePath}`;
-    if (!fs.existsSync(fullPath)) {
-      throw new AppError(httpStatus.BAD_REQUEST, `File ${filePath} doesn't exists in the agreed folder`, true);
-    }
     this.logger.debug({ msg: 'Starting deleteFile', fullPath });
     try {
       await fs.promises.unlink(fullPath);

@@ -49,15 +49,12 @@ describe('NFSProvider', () => {
       expect(fileExists).toBe(false);
     });
 
-    it('Should throw error when trying to delete nonExisting file from NFS', async () => {
-      const nonExistingFilePath = 'non-existing-file.txt';
+    it('Should throw AppError on deletion failure', async () => {
+      const filePath = randWord();
 
-      await expect(provider.deleteFile(nonExistingFilePath)).rejects.toThrow(
-        new AppError(httpStatus.BAD_REQUEST, `File ${nonExistingFilePath} doesn't exists in the agreed folder`, true)
+      await expect(provider.deleteFile(filePath)).rejects.toThrow(
+        new AppError(httpStatus.INTERNAL_SERVER_ERROR, `Deleting failed: ${filePath}`, true)
       );
-
-      const fileExists = await nfsHelper.fileExists(nonExistingFilePath);
-      expect(fileExists).toBe(false);
     });
   });
 });

@@ -18,7 +18,6 @@ export interface S3Config {
   sslEnabled: boolean;
   forcePathStyle: boolean;
   maxAttempts: number;
-  sigVersion: string;
 }
 
 export interface NFSConfig {
